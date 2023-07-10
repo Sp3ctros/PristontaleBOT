@@ -19,6 +19,7 @@ class Bosses:
         self.periodo = periodo
         self.tempo_final = tempo_final
         self.tempo_restante = tempo_restante
+#atualiza o tempo restante para o boss nascer
 def att_Timer():
     for m in lista_bosses:
         tempo_atual = datetime.datetime.now()
@@ -26,7 +27,7 @@ def att_Timer():
             m.tempo_restante = m.tempo_final - datetime.datetime.now()
         else:
             m.tempo_final = m.tempo_final + datetime.timedelta(hours=m.periodo)
-
+#Pega os valores de referencia dos timers e cria um objeto da classe Bosses para cada um dos boss
 def extrair_da_web():
     # Configurar o caminho para o driver do navegador
     webdriver_service = Service('C:\\Users\\Sp3ct\\Downloads\\chromedriver_win32 (1)\\chromedriver.exe')
@@ -40,10 +41,10 @@ def extrair_da_web():
     driver.get(url)
 
     time.sleep(3)
-    # Extrair a informação desejada
+    # Extrair a informação desejada (nome dos bosses e o tempo restante para nascer)
     element = driver.find_elements(By.CLASS_NAME, "count-down")
     element2 = driver.find_elements(By.CLASS_NAME, "countdown-boss-name")
-
+    #Itera cada um dos bosses e cria um objeto na classe Bosses para cada um.
     tempo_atual = datetime.datetime.now()
     for c, i in enumerate(element):
         hor = str(i.text)
@@ -57,28 +58,34 @@ def extrair_da_web():
     driver.quit()
 
 lista_bosses = list()
+#Período de nascimento de cada um dos bosses
 Periodo = [1,2,2,3,3,3,3,4,4,4,6,6,6,12,12]
 
+#Permissões necessárias do bot
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+#detecta quando o bot é iniciado
 @client.event
 async def on_ready():
     print(f'{client.user} está online')
 
+#Detecta quando tem alguma mensagem no chat e verifica se é algum comando.
 @client.event  
 async def on_message(message):
     print('oiiii')
     if message.author == client.user:
         return
     if message.content == '!boss':
+        #Adiciona no chat a tabela com o tempo dos bosses
         embed=discord.Embed(title="Timer dos bosses", color=0xFF5733)
         for d in lista_bosses:
             embed.add_field(name = '', value = f'**➤{d.nome} **: {str(d.tempo_restante)[:7]}', inline=False)
         embed.set_footer(text = f'Ultima atualização: {str(datetime.datetime.now())[:16]}')
         embed.set_image(url="https://static.subagames.com/PT1/images/guide/charinfo/priest1.jpg")
         msg = await message.channel.send(embed=embed)
+        #Atualiza a tabela dos tempos uma certa quantidade de vezes
         for c in range(1000):
             att_Timer()
             embed=discord.Embed(title="Timer dos bosses", color=0xFF5733)
@@ -90,7 +97,8 @@ async def on_message(message):
             time.sleep(4)
         embed = discord.Embed(title="Timer Finalizado:", color=0xFF5733)
         await msg.edit(embed=embed)
-            
+
+    #Atualiza os valores de referencia para os timers.
     if message.content == '!upboss':
         extrair_da_web()
 
