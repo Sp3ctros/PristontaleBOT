@@ -24,11 +24,8 @@ def att_Timer():
         tempo_atual = datetime.datetime.now()
         if tempo_atual < m.tempo_final:
             m.tempo_restante = m.tempo_final - datetime.datetime.now()
-        if tempo_atual >= m.tempo_final:
+        else:
             m.tempo_final = m.tempo_final + datetime.timedelta(hours=m.periodo)
-        
-lista_bosses = list()
-Periodo = [1,2,2,3,3,3,3,4,4,4,6,6,6,12,12]
 
 def extrair_da_web():
     # Configurar o caminho para o driver do navegador
@@ -58,6 +55,9 @@ def extrair_da_web():
         boss = Bosses(nome=element2[c].text,periodo=Periodo[c],tempo_final=tempo_final, tempo_restante=i.text)
         lista_bosses.append(boss)
     driver.quit()
+
+lista_bosses = list()
+Periodo = [1,2,2,3,3,3,3,4,4,4,6,6,6,12,12]
 
 intents = discord.Intents.default()
 intents.message_content = True
