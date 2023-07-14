@@ -30,7 +30,7 @@ def att_Timer():
 #Pega os valores de referencia dos timers e cria um objeto da classe Bosses para cada um dos boss
 def extrair_da_web():
     # Configurar o caminho para o driver do navegador
-    webdriver_service = Service('C:\\Users\\Sp3ct\\Downloads\\chromedriver_win32 (1)\\chromedriver.exe')
+    webdriver_service = Service('chromedriver.exe')
     # Configurar as opções do navegador
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Executar o navegador em headless
@@ -74,7 +74,6 @@ async def on_ready():
 #Detecta quando tem alguma mensagem no chat e verifica se é algum comando.
 @client.event  
 async def on_message(message):
-    print('oiiii')
     if message.author == client.user:
         return
     if message.content == '!boss':
@@ -94,7 +93,7 @@ async def on_message(message):
             embed.set_footer(text = f'Ultima atualização: {str(datetime.datetime.now())[:16]}\nJoão Lisboa')
             embed.set_image(url="https://static.subagames.com/PT1/images/guide/charinfo/priest1.jpg")
             await msg.edit(embed=embed)
-            time.sleep(4)
+            await asyncio.sleep(4)
         embed = discord.Embed(title="Timer Finalizado:", color=0xFF5733)
         await msg.edit(embed=embed)
 
