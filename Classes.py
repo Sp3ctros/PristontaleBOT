@@ -32,22 +32,21 @@ def att_Timer():
 
 #scrap the web for the time left and create objects for every boss
 def extrair_da_web():
-    # Configurar o caminho para o driver do navegador
     webdriver_service = Service('chromedriver.exe')
-    # Configurar as opções do navegador
+    # load the settings of the webdriver and open it
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')  # Executar o navegador em headless
+    options.add_argument('--headless') 
     driver = webdriver.Chrome(service=webdriver_service, options=options)
 
-    # Acessar o site desejado
+    # go to the site where the data is
     url = 'https://babel-pteu.netlify.app/'
     driver.get(url)
 
     asyncio.sleep(3)
-    # Extrair a informação desejada (nome dos bosses e o tempo restante para nascer)
+    # search for the boss name and the time left
     web_time_left = driver.find_elements(By.CLASS_NAME, "count-down")
     bosses_name = driver.find_elements(By.CLASS_NAME, "countdown-boss-name")
-    #Itera cada um dos bosses e cria um objeto na classe Bosses para cada um.
+    #iterate every boss and create a object for each one
     tempo_atual = datetime.datetime.now()
     for c, i in enumerate(web_time_left):
         hor = str(i.text)
